@@ -178,7 +178,13 @@ public class JDBCProStep1 implements ActionListener{
 		System.out.println(no+","+name+","+email+","+tel);
 		try {
 			pstmt=con.prepareStatement(sqlInsert);
-			//이하 숙제
+			pstmt.setInt(1, Integer.valueOf(no));  //?
+			pstmt.setString(2, name);
+			pstmt.setString(3, email);
+			pstmt.setString(4, tel);
+			int res=pstmt.executeUpdate();
+			if(res==1) System.out.println("성공");
+			else System.out.println("실패");
 			
 		} catch (Exception e) {
 			e.printStackTrace();
