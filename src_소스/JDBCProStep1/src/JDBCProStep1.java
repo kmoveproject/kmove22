@@ -178,7 +178,7 @@ public class JDBCProStep1 implements ActionListener{
 		System.out.println(no+","+name+","+email+","+tel);
 		try {
 			pstmt=con.prepareStatement(sqlInsert);
-			//숙제
+			//이하 숙제
 			
 		} catch (Exception e) {
 			e.printStackTrace();
