@@ -1,6 +1,9 @@
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -27,6 +30,21 @@ public class JDBCProStep1 implements ActionListener{
 	private static final int TOTAL=4;
 	int cmd=NONE;     
 	
+	
+	//DB연결을 위한 변수들
+	String driver="oracle.jdbc.OracleDriver";
+	String url="jdbc:oracle:thin:@127.0.0.1:1521:xe";
+	String user="system";
+	String password="123456";
+	Connection con=null;
+	PreparedStatement pstmt=null;
+	
+	String sqlTotal="select * from customer";
+	String sqlInsert="insert into customer values(?,?,?,?)";
+	String sqlDelete="delete from customer where name=?";
+	String sqlUpdate="update customer set email=? tel=? where code=? ";
+	String sqlSearch="select * from customer where name=?";
+		
 
 	/**
 	 * Launch the application.
@@ -47,11 +65,22 @@ public class JDBCProStep1 implements ActionListener{
 	/**
 	 * Create the application.
 	 */
-	public JDBCProStep1() {
+	public JDBCProStep1()  {
 		initialize();
 		init();
+		dbcon();
 	}
 
+	public void dbcon() {
+		try {
+			Class.forName(driver);
+			con=DriverManager.getConnection(url, user, password);
+			System.out.println("성공");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -139,6 +168,55 @@ public class JDBCProStep1 implements ActionListener{
 		
 	}
 
+	//추가버튼의 DB
+	//String sqlInsert="insert into customer values(?,?,?,?)";
+	public void add() {
+		String no=txtNo.getText();
+		String name=txtName.getText();
+		String email=txtEmail.getText();
+		String tel=txtTel.getText();
+		System.out.println(no+","+name+","+email+","+tel);
+		try {
+			pstmt=con.prepareStatement(sqlInsert);
+			//숙제
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	//삭제버튼의 DB
+	public void del() {
+		System.out.println("삭제");
+		System.out.println(txtName.getText());
+		try {
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	//검색버튼의 DB
+	public void search() {
+		System.out.println("검색");
+		System.out.println(txtName.getText());
+		try {
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	//전체보기버튼의 DB
+	public void total() {
+		System.out.println("전체보기");
+		try {
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	//3단계: actionPerformed 구현한다
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -148,6 +226,7 @@ public class JDBCProStep1 implements ActionListener{
 				return;
 			}
 			frame.setTitle("추가");
+			add();   //db연결하여 insert작업이 동작됨
 		} 
 		else if(e.getSource()==btnDel) { //삭제버튼 두번
 			if(cmd!=DELETE) {
@@ -155,6 +234,7 @@ public class JDBCProStep1 implements ActionListener{
 				return;
 			}
 			frame.setTitle("삭제");
+			del();   //db연결하여 삭제작업
 		} 
 		else if(e.getSource()==btnSearch) { //검색버튼 두번
 			if(cmd!=SEARCH) {
@@ -162,10 +242,12 @@ public class JDBCProStep1 implements ActionListener{
 				return;
 			}
 			frame.setTitle("검색");
+			search();    //db연결하여 이름검색
 		} 
 		else if(e.getSource()==btnTotal) { //전체검색 한번
 			call(TOTAL);
 			frame.setTitle("전체보기");
+			total();
 		} 
 		//취소버튼 인 경우
 		System.out.println("취소");
