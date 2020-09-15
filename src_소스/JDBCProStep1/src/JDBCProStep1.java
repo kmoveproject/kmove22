@@ -22,12 +22,14 @@ public class JDBCProStep1 implements ActionListener{
 	private JTextField txtTel;
 	private JTable table;
 	private JButton btnTotal, btnAdd, btnSearch, btnDel, btnCancel;
+	JButton btnUpdate;
 	
-	private static final int NONE=0;
-	private static final int ADD=1;
-	private static final int DELETE=2;
-	private static final int SEARCH=3;
-	private static final int TOTAL=4;
+	private static final int NONE=0;  //취소
+	private static final int ADD=1;   //추가(insert)
+	private static final int DELETE=2; //삭제(delete)
+	private static final int SEARCH=3;  //(select)
+	private static final int TOTAL=4;   //(select)
+	private static final int UPDATE=5;   //(update)
 	int cmd=NONE;     
 	
 	
@@ -141,23 +143,27 @@ public class JDBCProStep1 implements ActionListener{
 		
 		//추가
 		btnAdd = new JButton("추가"); 
-		btnAdd.setBounds(96, 304, 81, 23);
+		btnAdd.setBounds(96, 304, 57, 23);
 		frame.getContentPane().add(btnAdd);
 		
 		//삭제
 		btnDel = new JButton("삭제");   
-		btnDel.setBounds(180, 304, 81, 23);
+		btnDel.setBounds(157, 304, 62, 23);
 		frame.getContentPane().add(btnDel);
 		
 		//검색
 		btnSearch = new JButton("검색"); 
-		btnSearch.setBounds(264, 304, 81, 23);
+		btnSearch.setBounds(221, 304, 57, 23);
 		frame.getContentPane().add(btnSearch);
 		
 		//취소
 		btnCancel = new JButton("취소");   
-		btnCancel.setBounds(348, 304, 81, 23);
+		btnCancel.setBounds(338, 304, 62, 23);
 		frame.getContentPane().add(btnCancel);
+		
+		btnUpdate = new JButton("수정");
+		btnUpdate.setBounds(280, 304, 57, 23);
+		frame.getContentPane().add(btnUpdate);
 		
 		//2단계: 컴포넌트에 액션리스너를 추가한다
 		btnTotal.addActionListener(this);
@@ -191,12 +197,18 @@ public class JDBCProStep1 implements ActionListener{
 		}
 	}
 	
+	
+	//sqlDelete="delete from customer where name=?";
 	//삭제버튼의 DB
 	public void del() {
-		System.out.println("삭제");
-		System.out.println(txtName.getText());
+		System.out.println(txtName.getText()); //txtName상자의 값을 가져오라
 		try {
-			
+			String name=txtName.getText();
+			pstmt=con.prepareStatement(sqlDelete);  //1)준비된통
+			pstmt.setString(1, name);   //2)준비된 통에 세팅
+			int res=pstmt.executeUpdate(); //3)준비된 통 실행
+			if(res==1) System.out.println("삭제되었습니다.");
+			else System.out.println("실패했습니다.");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -313,5 +325,4 @@ public class JDBCProStep1 implements ActionListener{
 			break;
 		}
 	}
-	
 }
