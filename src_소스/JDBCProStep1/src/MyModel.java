@@ -21,6 +21,17 @@ public class MyModel extends AbstractTableModel {
 		// TODO Auto-generated method stub
 		return data.length;         //2개의 레코드 
 	}
+	
+	//select count(*) from customer
+	public void getRowCount(ResultSet rsScroll) {
+		try {
+			rsScroll.last();
+			rows=rsScroll.getRow();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 
 	@Override
 	public Object getValueAt(int arg0, int arg1) {
@@ -34,12 +45,13 @@ public class MyModel extends AbstractTableModel {
 		return columnName[column];
 	}
 	
+	
 	public void setData(ResultSet rs) {
 		try {
 			ResultSetMetaData rsmd;
 			
 			rsmd=rs.getMetaData();
-			cols=rsmd.getColumnCount();
+			cols=rsmd.getColumnCount();  //4개의 컬럼(필드)
 			columnName=new String[cols];
 			for(int i=0; i<cols; i++)
 				columnName[i]=rsmd.getColumnName(i+1);
