@@ -4,6 +4,7 @@ import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -30,7 +31,9 @@ public class JDBCProStep1 implements ActionListener{
 	private static final int SEARCH=3;  //(select)
 	private static final int TOTAL=4;   //(select)
 	private static final int UPDATE=5;   //(update)
-	int cmd=NONE;     
+	int cmd=NONE;    
+	
+	MyModel model;
 	
 	
 	//DB연결을 위한 변수들
@@ -40,6 +43,9 @@ public class JDBCProStep1 implements ActionListener{
 	String password="123456";
 	Connection con=null;
 	PreparedStatement pstmt=null;
+	PreparedStatement pstmtTotal, pstmtTotalScroll;
+	PreparedStatement pstmtSearch, pstmtSearchScroll;
+	
 	
 	String sqlTotal="select * from customer";
 	String sqlInsert="insert into customer values(?,?,?,?)";
@@ -229,6 +235,18 @@ public class JDBCProStep1 implements ActionListener{
 	public void total() {
 		System.out.println("전체보기");
 		try {
+			pstmtTotalScroll=con.prepareStatement(sqlTotal,
+					ResultSet.TYPE_SCROLL_SENSITIVE,
+					ResultSet.CONCUR_UPDATABLE);
+			pstmtTotal=con.prepareStatement(sqlTotal);
+			
+			ResultSet rsScroll=pstmtTotalScroll.executeQuery();
+			ResultSet rs=pstmtTotal.executeQuery();
+			if(model==null) model=new MyModel();
+			model.getRowCount(rsScroll);
+			model.setData(rs);
+			table.setModel(model);
+			table.updateUI();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
