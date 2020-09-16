@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -50,7 +51,7 @@ public class JDBCProStep1 implements ActionListener{
 	String sqlTotal="select * from customer";
 	String sqlInsert="insert into customer values(?,?,?,?)";
 	String sqlDelete="delete from customer where name=?";
-	String sqlUpdate="update customer set email=? tel=? where code=? ";
+	String sqlUpdate="update customer set email=?, tel=? where code=? ";
 	String sqlSearch="select * from customer where name=?";
 		
 
@@ -95,7 +96,7 @@ public class JDBCProStep1 implements ActionListener{
 	private void initialize() {
 		frame = new JFrame();
 		frame.setTitle("고객관리프로그램");
-		frame.setBounds(100, 100, 516, 394);
+		frame.setBounds(100, 100, 563, 398);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
@@ -149,26 +150,26 @@ public class JDBCProStep1 implements ActionListener{
 		
 		//추가
 		btnAdd = new JButton("추가"); 
-		btnAdd.setBounds(96, 304, 57, 23);
+		btnAdd.setBounds(96, 304, 81, 23);
 		frame.getContentPane().add(btnAdd);
 		
 		//삭제
 		btnDel = new JButton("삭제");   
-		btnDel.setBounds(157, 304, 62, 23);
+		btnDel.setBounds(178, 304, 81, 23);
 		frame.getContentPane().add(btnDel);
 		
 		//검색
 		btnSearch = new JButton("검색"); 
-		btnSearch.setBounds(221, 304, 57, 23);
+		btnSearch.setBounds(260, 304, 81, 23);
 		frame.getContentPane().add(btnSearch);
 		
 		//취소
 		btnCancel = new JButton("취소");   
-		btnCancel.setBounds(338, 304, 62, 23);
+		btnCancel.setBounds(429, 304, 81, 23);
 		frame.getContentPane().add(btnCancel);
 		
 		btnUpdate = new JButton("수정");
-		btnUpdate.setBounds(280, 304, 57, 23);
+		btnUpdate.setBounds(342, 304, 81, 23);
 		frame.getContentPane().add(btnUpdate);
 		
 		//2단계: 컴포넌트에 액션리스너를 추가한다
@@ -177,6 +178,7 @@ public class JDBCProStep1 implements ActionListener{
 		btnDel.addActionListener(this);
 		btnSearch.addActionListener(this);
 		btnCancel.addActionListener(this);
+		btnUpdate.addActionListener(this);
 		
 	}
 
@@ -200,6 +202,13 @@ public class JDBCProStep1 implements ActionListener{
 			
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				pstmt.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -217,17 +226,45 @@ public class JDBCProStep1 implements ActionListener{
 			else System.out.println("실패했습니다.");
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				pstmt.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+		
 	}
 	
 	//검색버튼의 DB
+	//sqlSearch="select * from customer where name=?";
 	public void search() {
-		System.out.println("검색");
-		System.out.println(txtName.getText());
 		try {
+			String name=txtName.getText();
+			pstmtSearchScroll=con.prepareStatement(sqlSearch,
+					ResultSet.TYPE_SCROLL_SENSITIVE,
+					ResultSet.CONCUR_UPDATABLE);   //동적인 준비통-->last()
+			pstmtSearch=con.prepareStatement(sqlSearch);  //정적인 준비통
+			pstmtSearchScroll.setString(1, name);  //1은 첫번째?
+			pstmtSearch.setString(1, name);  //1은 첫번째?
+			ResultSet rsScroll=pstmtSearchScroll.executeQuery();
+			ResultSet rs=pstmtSearch.executeQuery();
+			if(model==null) model=new MyModel();
+			model.getRowCount(rsScroll);
+			model.setData(rs);
+			table.setModel(model);
+			table.updateUI();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				pstmtSearchScroll.close();
+				pstmtSearch.close();
+			} catch (Exception e2) {
+				// TODO: handle exception
+			}
 		}
 	}
 	
@@ -247,11 +284,46 @@ public class JDBCProStep1 implements ActionListener{
 			model.setData(rs);
 			table.setModel(model);
 			table.updateUI();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				pstmtTotalScroll.close();
+				pstmtTotal.close();
+			} catch (Exception e2) {
+				// TODO: handle exception
+			}
+			
+		}
+	}
+	
+	//sqlUpdate="update customer set email=?, tel=? where code=? ";
+	public void update() {
+		String code=txtNo.getText();
+		String email=txtEmail.getText();
+		String tel=txtTel.getText();
+		try {
+			pstmt=con.prepareStatement(sqlUpdate);
+			pstmt.setString(1, email);
+			pstmt.setString(2, tel);
+			pstmt.setInt(3, Integer.valueOf(code));
+			
+			int res=pstmt.executeUpdate();
+			if(res==1) System.out.println("수정성공");
+			else System.out.println("실패");
 			
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				pstmt.close();
+			} catch (Exception e2) {
+				// TODO: handle exception
+			}
 		}
 	}
+	
+	
 	
 	//3단계: actionPerformed 구현한다
 	@Override
@@ -263,6 +335,7 @@ public class JDBCProStep1 implements ActionListener{
 			}
 			frame.setTitle("추가");
 			add();   //db연결하여 insert작업이 동작됨
+			total();
 		} 
 		else if(e.getSource()==btnDel) { //삭제버튼 두번
 			if(cmd!=DELETE) {
@@ -271,6 +344,7 @@ public class JDBCProStep1 implements ActionListener{
 			}
 			frame.setTitle("삭제");
 			del();   //db연결하여 삭제작업
+			total();
 		} 
 		else if(e.getSource()==btnSearch) { //검색버튼 두번
 			if(cmd!=SEARCH) {
@@ -280,6 +354,15 @@ public class JDBCProStep1 implements ActionListener{
 			frame.setTitle("검색");
 			search();    //db연결하여 이름검색
 		} 
+		else if(e.getSource()==btnUpdate) {
+			if(cmd!=UPDATE) {
+				call(UPDATE);
+				return;
+			}
+			frame.setTitle("수정");
+			update();
+			total();
+		}
 		else if(e.getSource()==btnTotal) { //전체검색 한번
 			call(TOTAL);
 			frame.setTitle("전체보기");
@@ -307,7 +390,7 @@ public class JDBCProStep1 implements ActionListener{
 		btnCancel.setEnabled(true);
 	}
 	
-	public void call(int command) {  //cmd=1,2,3
+	public void call(int command) {  //cmd=1,2,3,4,5
 		btnTotal.setEnabled(false);
 		btnAdd.setEnabled(false);
 		btnDel.setEnabled(false);
@@ -334,6 +417,14 @@ public class JDBCProStep1 implements ActionListener{
 			
 			btnSearch.setEnabled(true);   //search버튼만 켜기
 			cmd=SEARCH;
+			break;
+		case UPDATE:
+			txtNo.setEditable(true);
+			txtEmail.setEditable(true);
+			txtTel.setEditable(true);
+			
+			btnUpdate.setEnabled(true);  //수정버튼만 켜기
+			cmd=UPDATE;
 			break;
 		case TOTAL:
 			cmd=TOTAL;
