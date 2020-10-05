@@ -1,4 +1,3 @@
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -11,11 +10,14 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-public class fCustomer implements ActionListener {
+public class fCustomer extends JInternalFrame 
+	implements ActionListener {
+	
 
 	private JFrame frame;
 	private JTextField tf1;
@@ -45,18 +47,18 @@ public class fCustomer implements ActionListener {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					fCustomer window = new fCustomer();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					fCustomer window = new fCustomer();
+//					window.this.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 	/**
 	 * Create the application.
@@ -88,57 +90,57 @@ public class fCustomer implements ActionListener {
 	}
 
 	/**
-	 * Initialize the contents of the frame.
+	 * Initialize the contents of the this.
 	 */
 	private void initialize() {
-		frame = new JFrame();
-		frame.setBounds(100, 100, 346, 293);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
+//		frame = new JFrame();
+		this.setBounds(100,100,300,400);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.getContentPane().setLayout(null);
 
 		JLabel lblNewLabel = new JLabel("고객번호");
 		lblNewLabel.setBounds(22, 49, 57, 15);
-		frame.getContentPane().add(lblNewLabel);
+		this.getContentPane().add(lblNewLabel);
 
 		tf1 = new JTextField();
 		tf1.setBounds(91, 46, 116, 21);
-		frame.getContentPane().add(tf1);
+		this.getContentPane().add(tf1);
 		tf1.setColumns(10);
 
 		JLabel lblNewLabel_1 = new JLabel("고객이름");
 		lblNewLabel_1.setBounds(22, 85, 57, 15);
-		frame.getContentPane().add(lblNewLabel_1);
+		this.getContentPane().add(lblNewLabel_1);
 
 		tf2 = new JTextField();
 		tf2.setBounds(91, 82, 116, 21);
-		frame.getContentPane().add(tf2);
+		this.getContentPane().add(tf2);
 		tf2.setColumns(10);
 
 		JLabel lblNewLabel_2 = new JLabel("주소");
 		lblNewLabel_2.setBounds(22, 123, 57, 15);
-		frame.getContentPane().add(lblNewLabel_2);
+		this.getContentPane().add(lblNewLabel_2);
 
 		tf3 = new JTextField();
 		tf3.setBounds(91, 120, 116, 21);
-		frame.getContentPane().add(tf3);
+		this.getContentPane().add(tf3);
 		tf3.setColumns(10);
 
 		JLabel lblNewLabel_3 = new JLabel("전화번호");
 		lblNewLabel_3.setBounds(22, 159, 57, 15);
-		frame.getContentPane().add(lblNewLabel_3);
+		this.getContentPane().add(lblNewLabel_3);
 
 		tf4 = new JTextField();
 		tf4.setBounds(91, 156, 116, 21);
-		frame.getContentPane().add(tf4);
+		this.getContentPane().add(tf4);
 		tf4.setColumns(10);
 
 		JLabel lblNewLabel_4 = new JLabel("고객구분");
 		lblNewLabel_4.setBounds(22, 196, 57, 15);
-		frame.getContentPane().add(lblNewLabel_4);
+		this.getContentPane().add(lblNewLabel_4);
 
 		jcb1 = new JComboBox();
 		jcb1.setBounds(91, 193, 92, 21);
-		frame.getContentPane().add(jcb1);
+		this.getContentPane().add(jcb1);
 		for (int i = 0; i < customer_dist.length; i++) {
 			jcb1.addItem(customer_dist[i]);
 		}
@@ -146,47 +148,47 @@ public class fCustomer implements ActionListener {
 		btnMoveFirst = new JButton("");
 		btnMoveFirst.setIcon(new ImageIcon("C:\\GitHub\\choimysil\\kmove2\\BankProject\\src\\TOOLBAR\\FIRST.GIF"));
 		btnMoveFirst.setBounds(0, 0, 30, 23);
-		frame.getContentPane().add(btnMoveFirst);
+		this.getContentPane().add(btnMoveFirst);
 
 		btnMovePrev = new JButton("");
 		btnMovePrev.setIcon(new ImageIcon("C:\\GitHub\\choimysil\\kmove2\\BankProject\\src\\TOOLBAR\\PREV.GIF"));
 		btnMovePrev.setBounds(31, 0, 30, 23);
-		frame.getContentPane().add(btnMovePrev);
+		this.getContentPane().add(btnMovePrev);
 
 		btnMoveNext = new JButton("");
 		btnMoveNext.setIcon(new ImageIcon("C:\\GitHub\\choimysil\\kmove2\\BankProject\\src\\TOOLBAR\\NEXT.GIF"));
 		btnMoveNext.setBounds(58, 0, 30, 23);
-		frame.getContentPane().add(btnMoveNext);
+		this.getContentPane().add(btnMoveNext);
 
 		btnMoveLast = new JButton("");
 		btnMoveLast.setIcon(new ImageIcon("C:\\GitHub\\choimysil\\kmove2\\BankProject\\src\\TOOLBAR\\LAST.GIF"));
 		btnMoveLast.setBounds(91, 0, 30, 23);
-		frame.getContentPane().add(btnMoveLast);
+		this.getContentPane().add(btnMoveLast);
 
 		btnInsertItem = new JButton("");
 		btnInsertItem.setIcon(new ImageIcon("C:\\GitHub\\choimysil\\kmove2\\BankProject\\src\\TOOLBAR\\INSERT.GIF"));
 		btnInsertItem.setBounds(121, 0, 30, 23);
-		frame.getContentPane().add(btnInsertItem);
+		this.getContentPane().add(btnInsertItem);
 
 		btnDeleteItem = new JButton("");
 		btnDeleteItem.setIcon(new ImageIcon("C:\\GitHub\\choimysil\\kmove2\\BankProject\\src\\TOOLBAR\\DELETE.GIF"));
 		btnDeleteItem.setBounds(153, 0, 30, 23);
-		frame.getContentPane().add(btnDeleteItem);
+		this.getContentPane().add(btnDeleteItem);
 
 		btnSaveItem = new JButton("");
 		btnSaveItem.setIcon(new ImageIcon("C:\\GitHub\\choimysil\\kmove2\\BankProject\\src\\TOOLBAR\\SAVE.GIF"));
 		btnSaveItem.setBounds(185, 0, 30, 23);
-		frame.getContentPane().add(btnSaveItem);
+		this.getContentPane().add(btnSaveItem);
 
 		btnPrintItem = new JButton("");
 		btnPrintItem.setIcon(new ImageIcon("C:\\GitHub\\choimysil\\kmove2\\BankProject\\src\\TOOLBAR\\PRINT.GIF"));
 		btnPrintItem.setBounds(221, 0, 21, 23);
-		frame.getContentPane().add(btnPrintItem);
+		this.getContentPane().add(btnPrintItem);
 
 		btnCloseWindow = new JButton("");
 		btnCloseWindow.setIcon(new ImageIcon("C:\\GitHub\\choimysil\\kmove2\\BankProject\\src\\TOOLBAR\\EXIT.GIF"));
 		btnCloseWindow.setBounds(254, 0, 21, 23);
-		frame.getContentPane().add(btnCloseWindow);
+		this.getContentPane().add(btnCloseWindow);
 
 		btnMoveFirst.addActionListener(this);
 		btnMovePrev.addActionListener(this);
@@ -396,7 +398,7 @@ public class fCustomer implements ActionListener {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		frame.dispose();
+		this.dispose();
 	}
 	
 
