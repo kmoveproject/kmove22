@@ -48,11 +48,11 @@ public class JDBCProStep1 implements ActionListener{
 	PreparedStatement pstmtSearch, pstmtSearchScroll;
 	
 	
-	String sqlTotal="select * from customer";
-	String sqlInsert="insert into customer values(?,?,?,?)";
-	String sqlDelete="delete from customer where name=?";
-	String sqlUpdate="update customer set email=?, tel=? where code=? ";
-	String sqlSearch="select * from customer where name=?";
+	String sqlTotal="select * from customer1";
+	String sqlInsert="insert into customer1 values(?,?,?,?)";
+	String sqlDelete="delete from customer1 where name=?";
+	String sqlUpdate="update customer1 set email=?, tel=? where code=? ";
+	String sqlSearch="select * from customer1 where name=?";
 		
 
 	/**
@@ -183,7 +183,7 @@ public class JDBCProStep1 implements ActionListener{
 	}
 
 	//추가버튼의 DB
-	//String sqlInsert="insert into customer values(?,?,?,?)";
+	//String sqlInsert="insert into customer1 values(?,?,?,?)";
 	public void add() {
 		String no=txtNo.getText();
 		String name=txtName.getText();
@@ -213,7 +213,7 @@ public class JDBCProStep1 implements ActionListener{
 	}
 	
 	
-	//sqlDelete="delete from customer where name=?";
+	//sqlDelete="delete from customer1 where name=?";
 	//삭제버튼의 DB
 	public void del() {
 		System.out.println(txtName.getText()); //txtName상자의 값을 가져오라
@@ -238,7 +238,7 @@ public class JDBCProStep1 implements ActionListener{
 	}
 	
 	//검색버튼의 DB
-	//sqlSearch="select * from customer where name=?";
+	//sqlSearch="select * from customer1 where name=?";
 	public void search() {
 		try {
 			String name=txtName.getText();
@@ -297,7 +297,7 @@ public class JDBCProStep1 implements ActionListener{
 		}
 	}
 	
-	//sqlUpdate="update customer set email=?, tel=? where code=? ";
+	//sqlUpdate="update customer1 set email=?, tel=? where code=? ";
 	public void update() {
 		String code=txtNo.getText();
 		String email=txtEmail.getText();

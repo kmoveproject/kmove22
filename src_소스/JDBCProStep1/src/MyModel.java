@@ -22,7 +22,7 @@ public class MyModel extends AbstractTableModel {
 		return data.length;         //2개의 레코드 
 	}
 	
-	//select count(*) from customer
+	//select count(*) from customer1
 	public void getRowCount(ResultSet rsScroll) {
 		try {
 			rsScroll.last();
